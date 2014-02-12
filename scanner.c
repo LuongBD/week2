@@ -49,15 +49,42 @@ void skipComment() {
 
 Token* readIdentKeyword(void) {
   // TODO
+  Token *token=makeToken(TK_NONE,lineNo,colNo);
+  int dem=0;
+  while((currentChar!=EOF)&&((charCodes[currentChar]==CHAR_LETTER)||(charCodes[currentChar]==CHAR_DIGIT)))
+  {
+    if(dem<=MAX_IDENT_LEN) token->string[dem++]=(char)currentChar;
+    readChar();
+  }
+  if(dem>MAX_IDENT_LEN)
+  {
+    error(ERR_IDENTTOOLONG,lineNo,colNo);
+    return token;
+  }
+  token->string[dem]='\0';
+  token->tokenType=checkKeyword(token->string);
+  if(token->tokenType==TK_NONE)
+    token->tokenType=TK_IDENT;
+  return token;
   
 }
 
 Token* readNumber(void) {
   // TODO
+  {
+    Token *token = makeToken(TK_NUMBER, lineNo, colNo);
+    int dem = 0;
+
+    while ((currentChar != EOF) && (charCodes[currentChar] == CHAR_DIGIT)) {
+    token->string[count++] = (char)currentChar;
+    readChar();
+  }
 }
 
 Token* readConstChar(void) {
   // TODO
+   Token *token=makeToken(TK_NONE,lineNo,colNo);
+   int dem=0;
 }
 
 Token* getToken(void) {
